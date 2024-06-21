@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { supabase } from "./Supabase";
 
 export async function ImageUploader(file: File | string | null) {
@@ -15,9 +16,6 @@ export async function ImageUploader(file: File | string | null) {
 		});
 
 	if (error) {
-		// toast("Server Error !!! Try again later");
-
-		console.log(error);
 		return;
 	}
 

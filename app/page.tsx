@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import { ImageUploader } from "@/utils/ImageProcess";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function Home() {
 	const [image, setImage] = useState<string | null>(null);
@@ -20,6 +21,10 @@ export default function Home() {
 
 		console.log(file);
 		const x = await ImageUploader(file);
+
+		if (!x) {
+			return toast.error(<div>Server Error !!! Try again later</div>);
+		}
 
 		setImage(
 			`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/Files/${x.path}`
