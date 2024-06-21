@@ -26,34 +26,7 @@ export function InputText({
 					handleChange(e.target.value);
 				}}
 			/>
-			{err && (
-				<div className="font-sm text-red-600">* required field</div>
-			)}
-		</div>
-	);
-}
-
-export function InputEmail({
-	name,
-	type,
-	value,
-	handleChange,
-	err,
-}: IInputText) {
-	return (
-		<div className="flex flex-col gap-2 poppins-regular">
-			<label htmlFor={name}>{name}</label>
-			<input
-				type={type}
-				value={value}
-				className="border-2 border-blueShade outline-none focus:outline-none ring-0 focus:ring-0 lg:w-[650px] 
-                md:w-[450px] max-sm:w-full w-full
-                bg-inherit px-5 py-3 rounded-lg"
-				onChange={(e) => {
-					handleChange(e.target.value);
-				}}
-			/>
-			{err && (
+			{err && value === "" && (
 				<div className="font-sm text-red-600">* required field</div>
 			)}
 		</div>
@@ -81,7 +54,7 @@ export function InputTextArea({
 				}}
 				rows={4}
 			/>
-			{err && (
+			{err && value === "" && (
 				<div className="font-sm text-red-600">* required field</div>
 			)}
 		</div>

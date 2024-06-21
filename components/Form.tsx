@@ -171,7 +171,7 @@ export default function Form({
 				/>
 			</div>
 
-			<InputEmail
+			<InputText
 				name="Email"
 				type="email"
 				value={email}
