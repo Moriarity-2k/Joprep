@@ -4,10 +4,7 @@ export interface IUser extends Document {
 	firstname: string;
 	lastname: string;
 	email: string;
-	picture?: {
-		data: Buffer;
-		contentType: string;
-	};
+	picture?: string;
 	address?: string;
 }
 
@@ -16,10 +13,7 @@ const UserSchema = new Schema({
 	lastname: { type: String },
 	email: { type: String },
 	address: String,
-	picture: {
-		data: Buffer,
-		contentType: String,
-	},
+	picture: { type: String },
 });
 
 const User = models.User || model("User", UserSchema);

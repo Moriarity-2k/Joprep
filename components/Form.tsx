@@ -4,14 +4,19 @@ import React, { useEffect, useState } from "react";
 import { InputEmail, InputText, InputTextArea } from "./InputText";
 import InputImage from "./InputImage";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+// import { useRouter } from "next/router";
+import toast from "react-hot-toast";
 
 export default function Form({
 	image,
 	handleImage,
 }: {
-	image: File | null;
-	handleImage: (file: File) => void;
+	image: string | null;
+	handleImage: (file: File | null) => void;
 }) {
+	const router = useRouter();
+
 	const [firstName, setFirstName] = useState<string>("");
 	const [lastName, setLastName] = useState<string>("");
 	const [address, setAddress] = useState<string>("");
@@ -24,23 +29,19 @@ export default function Form({
 
 	const [loading, setLoading] = useState<boolean>(false);
 
+	const [err, setErr] = useState<boolean>(false);
+
 	useEffect(() => {
 		async function getUser() {
 			try {
-				let details = localStorage.getItem("JOPREP");
-				if (details) details = JSON.parse(details);
+				let localDetails;
+				if (localStorage.getItem("JOPREP"))
+					localDetails = JSON.parse(
+						localStorage.getItem("JOPREP") || ""
+					);
+				if (!localDetails || localDetails === "") return;
 
-				if (!details) return;
-
-				// @ts-ignore
-				if (details.picture.contentType) {
-					// @ts-ignore
-					details.picture.contentType = "image/jpg";
-					// @ts-ignore
-				}
-
-				// @ts-ignore
-				const id = details._id as string;
+				const id = localDetails._id;
 
 				const user = await axios.get(
 					`http://localhost:3000/api/profile/${id}`,
@@ -51,72 +52,54 @@ export default function Form({
 					}
 				);
 
-				const userDetails = user.data.user;
+				toast.success(
+					<div className="font-mono font-bold">
+						Details fetched successfully
+					</div>
+				);
 
-				// 				if (userDetails.picture) {
-				// 					// @ts-ignore
-				// 					if (details.picture.contentType) {
-				// 						// @ts-ignore
-				// 						details.picture.contentType = "image/jpg";
-				// 						// @ts-ignore
-				// 						console.log({ first: details.picture.contentType });
-				// 						const updatedImage = new File(
-				// 							[userDetails.picture],
-				// 							"updated-image.jpg",
-				// 							{
-				// 								type: "image/jpg",
-				// 							}
-				// 						);
-				// 						handleImage(updatedImage);
-				// 					}
-				//
-				// 					if (userDetails.picture) {
-				// 						userDetails.picture.contentType = "image/jpg";
-				// 					}
-				// 					console.log(userDetails.picture);
-				//
-				// 					const updatedImage = new File(
-				// 						[userDetails.picture],
-				// 						"updated-image.jpg",
-				// 						{
-				// 							type: "image/jpg",
-				// 						}
-				// 					);
-				// 					console.log({ updatedImage });
-				// 					handleImage(updatedImage);
-				//
-				// 					// handleImage(updatedImage);
-				// 				}
-
-				if (userDetails.firstname) setFirstName(userDetails.firstname);
-				if (userDetails.lastname) setLastName(userDetails.lastname);
-				if (userDetails.email) setEmail(userDetails.email);
-				if (userDetails.address) setAddress(userDetails.address);
-
-				const img = localStorage.getItem("image");
-
-				if (img) {
-					const img2 = JSON.parse(img);
-					handleImage(img2);
+				if (user.data.user.firstname) {
+					handleFirstName(user.data.user.firstname);
 				}
+				if (user.data.user.lastname)
+					handleLastName(user.data.user.lastname);
+				if (user.data.user.address)
+					handleAddress(user.data.user.address);
+				if (user.data.user.picture) handleImage(user.data.user.picture);
+				if (user.data.user.email) handleEmail(user.data.user.email);
 			} catch (err) {
 				console.log(err);
+				toast.error(
+					<div className="font-mono font-bold">
+						Please try again later
+					</div>
+				);
 			}
 		}
 		getUser();
 	}, []);
 
 	const handleSubmit = async () => {
+		if (
+			firstName === "" ||
+			lastName === "" ||
+			address === "" ||
+			email === ""
+		) {
+			setErr(true);
+			setTimeout(() => {
+				setErr(false);
+			}, 3000);
+
+			return;
+		}
+
 		const data = new FormData();
 		data.append("firstname", firstName);
 		data.append("lastname", lastName);
 		data.append("email", email);
 		data.append("address", address);
-
-		if (image) {
-			data.append("image", image as Blob);
-			localStorage.setItem("image", JSON.stringify(image));
-		}
+		if (image) data.append("image", image);
 
 		setLoading(true);
 		try {
@@ -130,20 +113,37 @@ export default function Form({
 				}
 			);
 
-			if (res.data.user) {
-				res.data.user.picture.contentType = "image/jpg";
-			}
+			toast.success(
+				<div className="font-bold font-mono">submission sucessfull</div>
+			);
 
 			localStorage.setItem("JOPREP", JSON.stringify(res.data.user));
 		} catch (err) {
 			console.log(err);
+			toast.error(
+				<div className="font-bold font-mono">Please Try again !!1</div>
+			);
 		} finally {
 			setLoading(false);
 		}
 	};
 
 	function handleReset() {
-		const x = alert("hello");
+		const userConfirmed = window.confirm(
+			"Are you sure you want to proceed?"
+		);
+		if (userConfirmed) {
+			localStorage.removeItem("JOPREP");
+			handleAddress("");
+			handleFirstName("");
+			handleLastName("");
+			handleImage(null);
+			handleEmail("");
+
+			toast.success(
+				<div className="font-bold font-mono">Reset successfull !!!</div>
+			);
+		}
 	}
 
 	return (
@@ -163,12 +163,14 @@ export default function Form({
 					type="text"
 					value={firstName}
 					handleChange={handleFirstName}
+					err={err}
 				/>
 				<InputText
 					name="Last Name"
 					type="text"
 					value={lastName}
 					handleChange={handleLastName}
+					err={err}
 				/>
 			</div>
 
@@ -177,6 +179,7 @@ export default function Form({
 				type="email"
 				value={email}
 				handleChange={handleEmail}
+				err={err}
 			/>
 
 			<InputTextArea
@@ -184,6 +187,7 @@ export default function Form({
 				type="textarea"
 				value={address}
 				handleChange={handleAddress}
+				err={err}
 			/>
 
 			<div className="md:float-right flex gap-8 max-sm:gap-4">

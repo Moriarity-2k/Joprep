@@ -3,9 +3,16 @@ interface IInputText {
 	type: string;
 	value: string;
 	handleChange: (value: string) => void;
+	err: boolean;
 }
 
-export function InputText({ name, type, value, handleChange }: IInputText) {
+export function InputText({
+	name,
+	type,
+	value,
+	handleChange,
+	err,
+}: IInputText) {
 	return (
 		<div className="flex flex-col gap-2 poppins-regular">
 			<label htmlFor={name}>{name}</label>
@@ -19,11 +26,20 @@ export function InputText({ name, type, value, handleChange }: IInputText) {
 					handleChange(e.target.value);
 				}}
 			/>
+			{err && (
+				<div className="font-sm text-red-600">* required field</div>
+			)}
 		</div>
 	);
 }
 
-export function InputEmail({ name, type, value, handleChange }: IInputText) {
+export function InputEmail({
+	name,
+	type,
+	value,
+	handleChange,
+	err,
+}: IInputText) {
 	return (
 		<div className="flex flex-col gap-2 poppins-regular">
 			<label htmlFor={name}>{name}</label>
@@ -37,11 +53,20 @@ export function InputEmail({ name, type, value, handleChange }: IInputText) {
 					handleChange(e.target.value);
 				}}
 			/>
+			{err && (
+				<div className="font-sm text-red-600">* required field</div>
+			)}
 		</div>
 	);
 }
 
-export function InputTextArea({ name, type, value, handleChange }: IInputText) {
+export function InputTextArea({
+	name,
+	type,
+	value,
+	handleChange,
+	err,
+}: IInputText) {
 	return (
 		<div className="flex flex-col gap-2 poppins-regular">
 			<label htmlFor={name}>{name}</label>
@@ -56,6 +81,9 @@ export function InputTextArea({ name, type, value, handleChange }: IInputText) {
 				}}
 				rows={4}
 			/>
+			{err && (
+				<div className="font-sm text-red-600">* required field</div>
+			)}
 		</div>
 	);
 }

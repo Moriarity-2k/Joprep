@@ -6,10 +6,7 @@ export async function createProfile(data: {
 	lastname: string;
 	email: string;
 	address: string;
-	picture: {
-		data: Buffer;
-		contentType: string;
-	};
+	picture: string;
 }) {
 	try {
 		connectToDatabase();
@@ -26,7 +23,7 @@ export async function getProfile(id: string) {
 	try {
 		connectToDatabase();
 
-		const user = await User.findOne({ id });
+		const user = await User.findOne({ _id: id });
 
 		return user;
 	} catch (err) {

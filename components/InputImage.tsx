@@ -3,7 +3,7 @@ import { ChangeEvent, useRef } from "react";
 import { CiCamera } from "react-icons/ci";
 
 interface IInputImage {
-	value: File | null;
+	value: string | null;
 	handleChange: (value: File) => void;
 }
 
@@ -14,7 +14,7 @@ export default function InputImage({ value, handleChange }: IInputImage) {
 		<div className="">
 			<input
 				type="file"
-				accept=".jpg"
+				accept="image/*"
 				ref={ref}
 				hidden
 				// value={value}
@@ -32,9 +32,10 @@ export default function InputImage({ value, handleChange }: IInputImage) {
 					}}
 				>
 					<CiCamera />
-					{value != null
+					{/* {value != null
 						? value.name.split(".")[0]
-						: "Add a profile photo"}
+						: "Add a profile photo"} */}
+					Image
 				</button>
 			</div>
 		</div>

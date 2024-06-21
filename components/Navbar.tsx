@@ -1,8 +1,6 @@
 import Image from "next/image";
 
-export default function Navbar({ file }: { file: File | null }) {
-	console.log({ file });
-
+export default function Navbar({ file }: { file: string | null }) {
 	return (
 		<div className="px-10 py-4 flex items-center justify-between shadow-sm shadow-[#38383842]">
 			<div className="font-semibold text-2xl">Acme Co</div>
@@ -15,15 +13,15 @@ export default function Navbar({ file }: { file: File | null }) {
 				<div>Services</div>
 				<div>Support</div>
 				<Image
-					src={`${
-						file != null
-							? URL.createObjectURL(file)
-							: "/default.png"
-					}`}
-					width={40}
-					height={40}
-					className="rounded-full"
+					src={file ? `${file}` : "/default.png"}
+					width={30}
+					height={20}
+					className="rounded-full bg-cover"
 					alt="profile"
+					style={{
+						width: "auto",
+						height: "auto",
+					}}
 				/>
 			</div>
 		</div>
