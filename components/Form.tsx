@@ -36,7 +36,8 @@ export default function Form({
 		async function getUser() {
 			try {
 				let localDetails;
-				if (localStorage.getItem("JOPREP"))
+
+				if (localStorage.getItem("JOPREP") != null)
 					localDetails = JSON.parse(
 						localStorage.getItem("JOPREP") || ""
 					);
@@ -44,14 +45,12 @@ export default function Form({
 
 				const id = localDetails._id;
 
-				const user = await axios.get(
-					`${base_url}api/profile/${id}`,
-					{
-						headers: {
-							"Content-Type": "application/json",
-						},
-					}
-				);
+				// const user = await axios.get(`${base_url}api/profile/${id}`, {
+				const user = await axios.get(`/api/profile/${id}`, {
+					headers: {
+						"Content-Type": "application/json",
+					},
+				});
 
 				toast.success(
 					<div className="font-mono font-bold">
@@ -104,15 +103,12 @@ export default function Form({
 
 		setLoading(true);
 		try {
-			const res = await axios.post(
-				`${base_url}api/profile`,
-				data,
-				{
-					headers: {
-						"Content-Type": "multipart/form-data",
-					},
-				}
-			);
+			// const res = await axios.post(`${base_url}api/profile`, data, {
+			const res = await axios.post(`/api/profile`, data, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
+			});
 
 			toast.success(
 				<div className="font-bold font-mono">submission sucessfull</div>

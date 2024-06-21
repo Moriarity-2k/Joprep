@@ -1,7 +1,4 @@
-import { connectToDatabase } from "@/models/actions/mongoose";
 import { createProfile } from "@/models/actions/profile.action";
-import multer from "multer";
-import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
 	return Response.json({ message: "Api is working", ok: 1 });
