@@ -1,4 +1,13 @@
-import { createProfile } from "@/models/actions/profile.action";
+
+import { NextRequest, NextResponse } from 'next/server';
+import { connectToDatabase } from '@/models/actions/mongoose';
+import { createProfile } from '@/models/actions/profile.action';
+import { cors, runMiddleware } from '@/Middleware/cors';
+
+// Middleware to handle CORS
+async function handleCors(req: NextRequest, res: NextResponse) {
+	await runMiddleware(req, res, cors);
+}
 
 export async function GET(request: Request) {
 	return Response.json({ message: "Api is working", ok: 1 });
