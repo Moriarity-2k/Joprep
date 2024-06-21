@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 // import { useRouter } from "next/router";
 import toast from "react-hot-toast";
+import { base_url } from "@/utils/defaults";
 
 export default function Form({
 	image,
@@ -44,7 +45,7 @@ export default function Form({
 				const id = localDetails._id;
 
 				const user = await axios.get(
-					`http://localhost:3000/api/profile/${id}`,
+					`${base_url}api/profile/${id}`,
 					{
 						headers: {
 							"Content-Type": "application/json",
@@ -104,7 +105,7 @@ export default function Form({
 		setLoading(true);
 		try {
 			const res = await axios.post(
-				"http://localhost:3000/api/profile",
+				`${base_url}api/profile`,
 				data,
 				{
 					headers: {
