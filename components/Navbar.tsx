@@ -1,6 +1,15 @@
+"use client";
+
+import { useProfileForm } from "@/utils/hooks/useProfileForm";
 import Image from "next/image";
 
-export default function Navbar({ file }: { file: string | null }) {
+/**
+ *
+ * renders static navbar , with profile Image
+ */
+export default function Navbar() {
+	const { profileImage } = useProfileForm();
+
 	return (
 		<div className="px-10 py-4 flex items-center justify-between shadow-sm shadow-[#38383842]">
 			<div className="font-semibold text-2xl">Acme Co</div>
@@ -12,11 +21,13 @@ export default function Navbar({ file }: { file: string | null }) {
 				<div>Events</div>
 				<div>Services</div>
 				<div>Support</div>
+
+				{/* renders profile Image */}
 				<Image
-					src={file ? `${file}` : "/default.png"}
+					src={profileImage ? `${profileImage}` : "/default.png"}
 					width={30}
 					height={20}
-					className="rounded-full bg-cover"
+					className="rounded-full bg-cover cursor-pointer"
 					alt="profile"
 					style={{
 						width: "auto",

@@ -6,14 +6,19 @@ export interface IUser extends Document {
 	email: string;
 	picture?: string;
 	address?: string;
+	profileId: string;
 }
 
+/**
+ * Schema for the user profile
+ */
 const UserSchema = new Schema({
-	firstname: { type: String },
-	lastname: { type: String },
+	firstName: { type: String },
+	lastName: { type: String },
 	email: { type: String },
 	address: String,
-	picture: { type: String },
+	image: { type: String },
+	profileId: { type: String, default: "1" },
 });
 
 const User = models.User || model("User", UserSchema);

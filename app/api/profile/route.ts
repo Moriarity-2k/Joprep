@@ -1,8 +1,10 @@
+import { NextRequest, NextResponse } from "next/server";
+import { createProfile, getProfile } from "@/models/actions/profile.action";
+import { cors, runMiddleware } from "@/Middleware/cors";
 
-import { NextRequest, NextResponse } from 'next/server';
-import { connectToDatabase } from '@/models/actions/mongoose';
-import { createProfile } from '@/models/actions/profile.action';
-import { cors, runMiddleware } from '@/Middleware/cors';
+/**
+ * @route : /api/profile
+ */
 
 // Middleware to handle CORS
 async function handleCors(req: NextRequest, res: NextResponse) {
@@ -10,25 +12,23 @@ async function handleCors(req: NextRequest, res: NextResponse) {
 }
 
 export async function GET(request: Request) {
-	return Response.json({ message: "Api is working", ok: 1 });
+	const user = await getProfile();
+
+	return Response.json({ message: "fetch successful", ok: 1, user });
 }
 
 export async function POST(request: Request) {
-	const x = await request.formData();
-	const firstname = x.get("firstname") as string;
-	const lastname = x.get("lastname") as string;
-	const email = x.get("email") as string;
-	const address = x.get("address") as string;
-
-	const image = x.get("image") as string;
+	const { firstName, lastName, address, email, image } = await request.json();
 
 	const user = await createProfile({
-		firstname,
-		lastname,
+		firstName,
+		lastName,
 		email,
 		address,
-		picture: image,
+		image,
 	});
 
-	return Response.json({ message: "upload successfull", user });
+	// console.log({ user });
+
+	return Response.json({ message: "upload successfull" });
 }
