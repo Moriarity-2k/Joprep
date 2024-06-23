@@ -170,6 +170,9 @@ export default function ProfileFormProvider({
 		reset();
 		setProfileImage(null);
 		setDefaultValues(null);
+		toast.success(
+			<div className="font-bold font-mono">Reset sucessfull</div>
+		);
 	};
 
 	return (
